@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey/models/task_data.dart';
 
-class AddTaskScreen extends StatefulWidget {
-  final Function appendTask;
-  AddTaskScreen({this.appendTask});
-
-  @override
-  _AddTaskScreenState createState() => _AddTaskScreenState();
-}
-
-class _AddTaskScreenState extends State<AddTaskScreen> {
-  String name;
-
+class AddTaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    String name;
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
@@ -33,7 +26,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           ),
           FlatButton(
             onPressed: () {
-              widget.appendTask(name);
+              Provider.of<TaskList>(context, listen: false).addTask(name);
+              Navigator.pop(context);
             },
             child: Text('Add'),
             color: Colors.blue[300],

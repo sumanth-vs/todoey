@@ -2,16 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
 import 'package:todoey/views/add_task_screen.dart';
 import 'package:todoey/widgets/tasks_list.dart';
-import 'package:todoey/models/task.dart';
+import 'package:provider/provider.dart';
+import 'package:todoey/models/task_data.dart';
 
-class TaskScreen extends StatefulWidget {
-  @override
-  _TaskScreenState createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  List<Task> tasks = [];
-
+class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +34,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  '${tasks.length} remaining.',
+                  '${Provider.of<TaskList>(context).taskCount} remaining.',
                   style: kSubTitleTextStyle,
                 ),
               ],
@@ -50,9 +44,7 @@ class _TaskScreenState extends State<TaskScreen> {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               decoration: kTodoCardStyle,
-              child: TasksList(
-                tasks: tasks,
-              ),
+              child: TasksList(),
             ),
           )
         ],
@@ -67,16 +59,7 @@ class _TaskScreenState extends State<TaskScreen> {
               ),
             ),
             context: context,
-            builder: (context) => AddTaskScreen(
-              appendTask: (value) {
-                setState(() {
-                  tasks.add(
-                    Task(name: value),
-                  );
-                });
-                Navigator.pop(context);
-              },
-            ),
+            builder: (context) => AddTaskScreen(),
           );
         },
         backgroundColor: Colors.blue[300],
