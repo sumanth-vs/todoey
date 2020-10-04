@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
 
-class AddTaskScreen extends StatelessWidget {
+class AddTaskScreen extends StatefulWidget {
+  final Function appendTask;
+  AddTaskScreen({this.appendTask});
+
+  @override
+  _AddTaskScreenState createState() => _AddTaskScreenState();
+}
+
+class _AddTaskScreenState extends State<AddTaskScreen> {
+  String name;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -17,16 +27,17 @@ class AddTaskScreen extends StatelessWidget {
           TextField(
             autofocus: true,
             textAlign: TextAlign.center,
-            onChanged: (value) {},
+            onChanged: (value) {
+              name = value;
+            },
           ),
           FlatButton(
-            onPressed: () {},
+            onPressed: () {
+              widget.appendTask(name);
+            },
+            child: Text('Add'),
             color: Colors.blue[300],
-            child: Text(
-              'Add',
-              style: TextStyle(color: Colors.white),
-            ),
-          )
+          ),
         ],
       ),
     );

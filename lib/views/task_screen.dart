@@ -2,28 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:todoey/constants.dart';
 import 'package:todoey/views/add_task_screen.dart';
 import 'package:todoey/widgets/tasks_list.dart';
+import 'package:todoey/models/task.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
+  @override
+  _TaskScreenState createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  List<Task> tasks = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
-            ),
-            isScrollControlled: true,
-            context: context,
-            builder: (context) => AddTaskScreen(),
-          );
-        },
-        backgroundColor: Colors.blue[300],
-        child: Icon(Icons.add),
-      ),
       backgroundColor: Colors.blue[300],
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +40,7 @@ class TaskScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Text(
-                  '12 remaining.',
+                  '${tasks.length} remaining.',
                   style: kSubTitleTextStyle,
                 ),
               ],
@@ -59,10 +50,37 @@ class TaskScreen extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               decoration: kTodoCardStyle,
-              child: TasksList(),
+              child: TasksList(
+                tasks: tasks,
+              ),
             ),
           )
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+              ),
+            ),
+            context: context,
+            builder: (context) => AddTaskScreen(
+              appendTask: (value) {
+                setState(() {
+                  tasks.add(
+                    Task(name: value),
+                  );
+                });
+                Navigator.pop(context);
+              },
+            ),
+          );
+        },
+        backgroundColor: Colors.blue[300],
+        child: Icon(Icons.add),
       ),
     );
   }
